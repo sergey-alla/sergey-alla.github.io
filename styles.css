@@ -36,12 +36,14 @@ table {
 /* ! reset */
 
 #container {
+    --container-width: min(900px, 90vw);
     box-shadow: 4px 4px 11px 0 rgba(34, 60, 80, 0.4);
-    max-width: min(900px, 90vw);
+    width: var(--container-width);
     height: 1500px;
     margin: 30px auto;
     background-color: rgb(255, 255, 248);
     padding: 20px 30px;
+    box-sizing: border-box;
 }
 
 .flower-bg {
@@ -63,27 +65,29 @@ table {
 }
 
 #countdown-cont {
+    --rel-w: min(1rem, calc(var(--container-width) / 50));
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
+    margin: 0 calc(-3 * var(--rel-w));
 }
 
 #countdown-cont>.event-countdown-desc {
-    font-size: 2.5rem;
-    margin: 5px 0 8px;
+    font-size: calc(3 * var(--rel-w));
+    margin: calc(var(--rel-w) * 0.3) 0 calc(var(--rel-w) / 2);
 }
 
 #countdown-cont .counter>p {
-    font-size: 2rem;
+    font-size: calc(var(--rel-w) * 2);
     margin: 0;
 }
 
 #countdown-cont>.event-countdown-desc,
 #countdown-cont .counter>p {
     font-family: 'Great Vibes', Helvetica, sans-serif;
-    letter-spacing: 0.1rem;
+    letter-spacing: calc(var(--rel-w) / 10);
 }
 
 .countdown-units {
@@ -105,21 +109,21 @@ table {
 }
 
 .countdown-units>.counter>div>div {
-    font-size: 5rem;
+    font-size: calc(var(--rel-w) * 5);
     font-family: 'Great Vibes', Helvetica, sans-serif;
     background-color: #f5f7ff;
     color: #030569;
     box-sizing: border-box;
-    width: 50px;
-    padding: 7px 8px 1px 4px;
-    border-radius: 12px;
-    margin: 0 2px 4px;
+    width: calc(var(--rel-w) * 3.2);
+    border-radius: calc(var(--rel-w) * 0.75);
+    margin: 0 calc(var(--rel-w) / 8) calc(var(--rel-w) / 4);
+    padding: calc(var(--rel-w) / 16 * 7) calc(var(--rel-w) / 2) calc(var(--rel-w) / 16) calc(var(--rel-w) / 4);
 }
 
 .countdown-units>.gap {
-    font-size: 4rem;
+    font-size: calc(var(--rel-w) * 4);
     font-family: 'Times New Roman', Times, serif;
     color: black;
     opacity: 0.3;
-    margin: 5px 3px 0;
+    margin: calc(var(--rel-w) * 0.3) calc(var(--rel-w) * 0.2) 0;
 }
