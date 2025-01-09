@@ -41,6 +41,7 @@ table {
     height: 1500px;
     margin: 30px auto;
     background-color: rgb(255, 255, 248);
+    padding: 20px 30px;
 }
 
 .flower-bg {
@@ -59,4 +60,66 @@ table {
     right: 0;
     z-index: -11;
     transform: scale(-1, 1);
+}
+
+#countdown-cont {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+#countdown-cont>.event-countdown-desc {
+    font-size: 2.5rem;
+    margin: 5px 0 8px;
+}
+
+#countdown-cont .counter>p {
+    font-size: 2rem;
+    margin: 0;
+}
+
+#countdown-cont>.event-countdown-desc,
+#countdown-cont .counter>p {
+    font-family: 'Great Vibes', Helvetica, sans-serif;
+    letter-spacing: 0.1rem;
+}
+
+.countdown-units {
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.countdown-units>.counter {
+    display: flex;
+    flex-direction: column;
+}
+
+.countdown-units>.counter>div {
+    display: flex;
+    flex-direction: row;
+}
+
+.countdown-units>.counter>div>div {
+    font-size: 5rem;
+    font-family: 'Great Vibes', Helvetica, sans-serif;
+    background-color: #f5f7ff;
+    color: #030569;
+    box-sizing: border-box;
+    width: 50px;
+    padding: 7px 8px 1px 4px;
+    border-radius: 12px;
+    margin: 0 2px 4px;
+}
+
+.countdown-units>.gap {
+    font-size: 4rem;
+    font-family: 'Times New Roman', Times, serif;
+    color: black;
+    opacity: 0.3;
+    margin: 5px 3px 0;
 }
