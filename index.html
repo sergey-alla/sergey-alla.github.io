@@ -9,15 +9,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
     <link rel="icon" href="favicon.ico"><!-- 32×32 -->
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
 </head>
 
-<body>
+<body class="preload">
 
-    <img id="left-flower-bg" class="flower-bg" src="img/flowers_side.jpg" />
-    <img id="right-flower-bg" class="flower-bg" src="img/flowers_side.jpg" />
+    <img id="left-flower-bg" class="flower-bg" src="img/flowers_side.jpg" alt="flowers" />
+    <img id="right-flower-bg" class="flower-bg" src="img/flowers_side.jpg" alt="flowers" />
     <div id="container">
-        <div id="countdown-ttt"></div>
-
         <div id="countdown-cont">
             <p class="event-countdown-desc">До мероприятия осталось:</p>
             <div class="countdown-units">
@@ -53,6 +52,28 @@
                     </div>
                     <p class="seconds-desc">секунд</p>
                 </div>
+            </div>
+        </div>
+        <div class="foldable-box">
+            <div class="foldable-header">
+                <p>Описание данного блока</p><img src="img/arrow-down.png" alt="V" />
+            </div>
+            <div class="foldable-content">
+                <p><i>Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci repellendus cum eligendi
+                        corrupti non accusamus quam voluptates placeat sit? Fugit expedita odit quas laborum porro
+                        numquam praesentium aspernatur et sapiente.</i></p>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci repellendus cum eligendi corrupti
+                    non accusamus quam voluptates placeat sit? Fugit expedita odit quas laborum porro numquam
+                    praesentium aspernatur et sapiente.</p>
+                <p><b>Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci repellendus cum eligendi
+                        corrupti non accusamus quam voluptates placeat sit? Fugit expedita odit quas laborum porro
+                        numquam praesentium aspernatur et sapiente.</b></p>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci repellendus cum eligendi corrupti
+                    non accusamus quam voluptates placeat sit? Fugit expedita odit quas laborum porro numquam
+                    praesentium aspernatur et sapiente.</p>
+                <p><u>Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci repellendus cum eligendi
+                        corrupti non accusamus quam voluptates placeat sit? Fugit expedita odit quas laborum porro
+                        numquam praesentium aspernatur et sapiente.</u></p>
             </div>
         </div>
     </div>

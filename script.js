@@ -1,7 +1,7 @@
 const countdownContainer = document.getElementById('countdown-cont');
 const countdownUnits = countdownContainer.querySelector('.countdown-units');
 
-const targetSec = Date.UTC(2025, 8, 27, 10, 0, 0) / 1000; // 27.09.2025 14:00 GMT+1
+let targetSec = new Date() / 1000 - 1;
 
 const wordForms = {
     days: ['дней', 'день', 'дня'],
@@ -9,6 +9,21 @@ const wordForms = {
     minutes: ['минут', 'минута', 'минуты'],
     seconds: ['секунд', 'секунда', 'секунды']
 };
+
+const currentUrl = new URL(window.location.href);
+const urlParams = new URLSearchParams(currentUrl.search);
+let key = urlParams.get('key');
+if (!key) {
+    key = localStorage.getItem('wedding-sa-zis') ?? '';
+    urlParams.set('key', key);
+    currentUrl.search = urlParams.toString();
+    window.history.replaceState({}, '', currentUrl);
+} else {
+    localStorage.setItem('wedding-sa-zis', key);
+}
+
+let decrypted = false;
+let decryptedData = {};
 
 const formIndex = amount => {
     const last = amount % 10;
@@ -42,8 +57,92 @@ const countdown = () => {
     var delta = now - expectedTime;
     expectedTime += intervalSec;
     // todo check if time is up
-    renderTime(getDiffUnits(targetSec - now / 1000));
+    renderTime(getDiffUnits(Math.max(targetSec - now / 1000, 0)));
 
     setTimeout(countdown, Math.max(0, intervalSec - delta));
 };
 setTimeout(countdown, intervalSec);
+
+const foldBox = box => {
+    box.classList.toggle('collapsed');
+}
+
+[...document.getElementsByClassName('foldable-box')].forEach(box => {
+    if (!box.classList.contains('opened')) {
+        box.classList.add('collapsed');
+    }
+    box.querySelector('.foldable-header').addEventListener('click', () => foldBox(box));
+    box.classList.add('animated');
+});
+
+const loadFile = async path => {
+    const data = await fetch(path).then(response => {
+        if (response.ok) return response.text();
+        return Promise.resolve('');
+    });
+    return data;
+};
+
+const decrypt = (data, key) => {
+    console.debug(`key = ${key}`);
+    console.debug(`data = ${data}`);
+    if (!key) {
+        console.warn('Не удалось расшифровать файл: передан пустой ключ');
+    } else if (!data) {
+        console.warn('Не удалось расшифровать файл: не переданы зашифрованные данные');
+    } else {
+        try {
+            const bytes = CryptoJS.AES.decrypt(data, key);
+            const decryptedText = bytes.toString(CryptoJS.enc.Utf8);
+            if (decryptedText) return decryptedText;
+            console.warn('Не удалось расшифровать файл: передан неверный ключ');
+        } catch (e) {
+            console.warn('Возникла ошибка при расшифровке файла');
+            console.warn(e);
+        }
+    }
+    return null;
+};
+
+function main() {
+    targetSec = Date.UTC(
+        decryptedData.dateUTC.year,
+        decryptedData.dateUTC.month - 1,
+        decryptedData.dateUTC.day,
+        decryptedData.dateUTC.hour,
+        decryptedData.dateUTC.minute,
+        0
+    ) / 1000;
+}
+
+(() => {
+    loadFile('encryptedData.txt')
+        .then(data => decrypt(data, key))
+        .then(data => {
+            let jsonData = null;
+            if (data) {
+                try {
+                    jsonData = JSON.parse(data);
+                } catch (_) {
+                    console.error(`Ошибка парсинга JSON из расшифрованных данных. Данные: ${data}`);
+                }
+            } else console.error('Не удалось расшифровать данные');
+            decryptedData = jsonData ?? {};
+            decrypted = !!jsonData;
+            return decrypted ? Promise.resolve() : Promise.reject();
+        })
+        .then(() => new Promise(
+            resolve => {
+                if (document.readyState === 'complete') resolve();
+                else window.addEventListener('load', resolve);
+            }
+        ))
+        .then(() => {
+            console.log(decryptedData);
+            document.body.classList.remove('preload');
+            main();
+        })
+        .catch(() => {
+            // todo
+        });
+})();

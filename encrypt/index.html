@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Зашифрованные данные</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+    <style>
+        body {
+            padding-left: 20px;
+            height: 2000px;
+        }
+
+        button {
+            margin-left: 10px;
+        }
+
+        #data {
+            padding-left: 10px;
+            font-size: 1rem;
+            font-family: Consolas, 'Courier New', Courier, monospace;
+            color: rgb(190, 13, 13);
+            word-break: break-all;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <button onclick="location.reload()">⟳</button>
+        <h1><a href="/">Вернуться на главную</a></h1>
+        <br />
+        <button class="c" disabled onclick="copy()">Копировать</button>
+        <br />
+        <br />
+        <p id="data">загрузка...</p>
+    </div>
+    <script type="text/javascript">
+
+        const dataElement = document.getElementById('data');
+        let decrypted = false;
+
+        const currentUrl = new URL(window.location.href);
+        const urlParams = new URLSearchParams(currentUrl.search);
+        const key = urlParams.get('key');
+        if (!key) {
+            urlParams.set('key', '');
+            currentUrl.search = urlParams.toString();
+            window.history.replaceState({}, '', currentUrl);
+        }
+
+        const copy = () => {
+            navigator.clipboard.writeText(dataElement.innerText);
+            dataElement.style = 'color: rgb(10, 130, 10)';
+        };
+
+        const handleData = data => {
+            if (!data) {
+                dataElement.innerHTML = '<i>Файл с данными пустой или отсутствует!</i>'; return;
+            }
+            if (!key) {
+                dataElement.innerHTML = '<i>Введён пустой ключ!</i>'; return;
+            }
+            try {
+                const _ = JSON.parse(data);
+            } catch (ignored) {
+                dataElement.innerHTML = '<i>Ошибка парсинга JSON!</i>'; return;
+            }
+            try {
+                dataElement.innerText = CryptoJS.AES.encrypt(data, key).toString();
+                decrypted = true;
+            } catch (e) {
+                dataElement.innerHTML = '<i>Ошибка шифрования данных!</i>';
+                console.error(e);
+            }
+        };
+
+        (() => {
+            fetch('/data.json')
+                .then(response => {
+                    if (response.ok) return response.text();
+                    return Promise.resolve('');
+                })
+                .then(handleData)
+                .then(() => document.querySelector('.c').disabled = !decrypted);
+        })();
+
+    </script>
+</body>
+
+</html>
