@@ -15,9 +15,11 @@ const urlParams = new URLSearchParams(currentUrl.search);
 let key = urlParams.get('key');
 if (!key) {
     key = localStorage.getItem('wedding-sa-zis') ?? '';
-    urlParams.set('key', key);
-    currentUrl.search = urlParams.toString();
-    window.history.replaceState({}, '', currentUrl);
+    if (key) {
+        urlParams.set('key', key);
+        currentUrl.search = urlParams.toString();
+        window.history.replaceState({}, '', currentUrl);
+    }
 } else {
     localStorage.setItem('wedding-sa-zis', key);
 }
@@ -75,17 +77,9 @@ const foldBox = box => {
     box.classList.add('animated');
 });
 
-const loadFile = async path => {
-    const data = await fetch(path).then(response => {
-        if (response.ok) return response.text();
-        return Promise.resolve('');
-    });
-    return data;
-};
-
 const decrypt = (data, key) => {
-    console.debug(`key = ${key}`);
-    console.debug(`data = ${data}`);
+    console.debug(`key: ${key}`);
+    console.debug(`data: ${data}`);
     if (!key) {
         console.warn('Не удалось расшифровать файл: передан пустой ключ');
     } else if (!data) {
@@ -105,18 +99,13 @@ const decrypt = (data, key) => {
 };
 
 function main() {
-    targetSec = Date.UTC(
-        decryptedData.dateUTC.year,
-        decryptedData.dateUTC.month - 1,
-        decryptedData.dateUTC.day,
-        decryptedData.dateUTC.hour,
-        decryptedData.dateUTC.minute,
-        0
-    ) / 1000;
+    const dateUTC = decryptedData.dateUTC;
+    targetSec = Date.UTC(dateUTC.year, dateUTC.month - 1, dateUTC.day, dateUTC.hour, dateUTC.minute, 0) / 1000;
 }
 
-(() => {
-    loadFile('encryptedData.txt')
+{
+    fetch('encryptedData.txt')
+        .then(response => response.ok ? response.text() : Promise.resolve(''))
         .then(data => decrypt(data, key))
         .then(data => {
             let jsonData = null;
@@ -138,11 +127,11 @@ function main() {
             }
         ))
         .then(() => {
-            console.log(decryptedData);
+            console.debug(decryptedData);
             document.body.classList.remove('preload');
             main();
         })
         .catch(() => {
             // todo
         });
-})();
+}

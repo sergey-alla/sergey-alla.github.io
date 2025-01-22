@@ -45,12 +45,14 @@ body.preload {
 
 #container {
     --container-width: min(900px, 90vw);
+    --rel-w: min(1rem, calc(var(--container-width) / 50));
+
     box-shadow: 4px 4px 11px 0 rgba(34, 60, 80, 0.4);
     width: var(--container-width);
     height: 1500px;
     margin: 30px auto;
     background-color: rgb(255, 255, 248);
-    padding: 20px 30px;
+    padding: 20px calc(var(--rel-w) * 2);
     box-sizing: border-box;
 }
 
@@ -73,7 +75,6 @@ body.preload {
 }
 
 #countdown-cont {
-    --rel-w: min(1rem, calc(var(--container-width) / 50));
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -83,7 +84,7 @@ body.preload {
 }
 
 #countdown-cont>.event-countdown-desc {
-    font-size: calc(var(--rel-w) * 3);
+    font-size: max(calc(var(--rel-w) * 3), 1rem);
     margin: calc(var(--rel-w) * 0.3) 0 calc(var(--rel-w) / 2);
 }
 
@@ -154,9 +155,9 @@ body.preload {
 
 .foldable-box>.foldable-header {
     align-self: stretch;
-    font-size: 1.75rem;
+    font-size: clamp(1.25rem, calc(var(--rel-w) * 3.25), 1.75rem);
     padding: 10px 10px 10px 5px;
-    margin: 0 15px;
+    margin: 0 min(calc(var(--rel-w) * 1.25), 15px);
     border-bottom: 1px solid #aaaacc8a;
     display: flex;
     flex-direction: row;
@@ -179,7 +180,7 @@ body.preload {
     translate: 0 0;
     rotate: 180deg;
     user-select: none;
-    margin-left: 0.75rem;
+    margin-left: 0.25rem;
 }
 
 .foldable-box.collapsed>.foldable-content {
@@ -197,8 +198,23 @@ body.preload {
     border-bottom: 1px solid #00000000;
 }
 
-.foldable-box.animated * {
-    transition: all var(--anim-time) var(--anim-func);
+.foldable-box.animated>.foldable-content {
+    transition:
+        max-height var(--anim-time) var(--anim-func),
+        opacity var(--anim-time) var(--anim-func),
+        margin var(--anim-time) var(--anim-func)
+    ;
+}
+
+.foldable-box.animated>.foldable-header>img {
+    transition:
+        rotate var(--anim-time) var(--anim-func),
+        translate var(--anim-time) var(--anim-func)
+    ;
+}
+
+.foldable-box.animated>.foldable-header {
+    transition: border-bottom var(--anim-time) var(--anim-func);
 }
 
 .foldable-box>.foldable-content {
