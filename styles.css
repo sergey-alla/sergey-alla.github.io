@@ -84,7 +84,7 @@ body.preload {
 }
 
 #countdown-cont>.event-countdown-desc {
-    font-size: max(calc(var(--rel-w) * 3), 1rem);
+    font-size: max(calc(var(--rel-w) * 3), 1.75rem);
     margin: calc(var(--rel-w) * 0.3) 0 calc(var(--rel-w) / 2);
 }
 
