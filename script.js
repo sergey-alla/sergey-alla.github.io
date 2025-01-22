@@ -46,9 +46,9 @@ const renderTime = units => {
     for (let unit in units) {
         const value = String(units[unit]).padStart(unit === 'days' ? 3 : 2, '0');
         for (let i = 0; i < value.length; i++) {
-            countdownUnits.querySelector(`.${unit}${i}`).innerHTML = value.charAt(i);
+            countdownUnits.querySelector(`.${unit}${i}`).innerText = value.charAt(i);
         }
-        countdownUnits.querySelector(`.${unit}-desc`).innerHTML = wordForms[unit][formIndex(units[unit])];
+        countdownUnits.querySelector(`.${unit}-desc`).innerText = wordForms[unit][formIndex(units[unit])];
     }
 };
 
@@ -126,6 +126,7 @@ function main() {
                 else window.addEventListener('load', resolve);
             }
         ))
+        .then(() => new Promise(resolve => setTimeout(resolve, 200)))
         .then(() => {
             console.debug(decryptedData);
             document.body.classList.remove('preload');

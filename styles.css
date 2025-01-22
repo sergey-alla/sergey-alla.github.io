@@ -138,10 +138,10 @@ body.preload {
 }
 
 .foldable-box {
-    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+    font-family: 'PT Serif', serif;
     box-shadow: 2px 2px 13px 0 rgba(34, 60, 80, 0.6);
     background-color: white;
-    border-radius: 20px;
+    border-radius: 16px;
     overflow: hidden;
     box-sizing: border-box;
     width: min(100%, 700px);
@@ -155,7 +155,7 @@ body.preload {
 
 .foldable-box>.foldable-header {
     align-self: stretch;
-    font-size: clamp(1.25rem, calc(var(--rel-w) * 3.25), 1.75rem);
+    font-size: clamp(1.35rem, calc(var(--rel-w) * 3.25), 1.75rem);
     padding: 10px 10px 10px 5px;
     margin: 0 min(calc(var(--rel-w) * 1.25), 15px);
     border-bottom: 1px solid #aaaacc8a;
@@ -180,7 +180,7 @@ body.preload {
     translate: 0 0;
     rotate: 180deg;
     user-select: none;
-    margin-left: 0.25rem;
+    margin-left: 0.5rem;
 }
 
 .foldable-box.collapsed>.foldable-content {
@@ -202,15 +202,15 @@ body.preload {
     transition:
         max-height var(--anim-time) var(--anim-func),
         opacity var(--anim-time) var(--anim-func),
-        margin var(--anim-time) var(--anim-func)
+        margin-top var(--anim-time) var(--anim-func),
+        margin-bottom var(--anim-time) var(--anim-func)
     ;
 }
 
 .foldable-box.animated>.foldable-header>img {
     transition:
         rotate var(--anim-time) var(--anim-func),
-        translate var(--anim-time) var(--anim-func)
-    ;
+        translate var(--anim-time) var(--anim-func);
 }
 
 .foldable-box.animated>.foldable-header {
@@ -220,7 +220,11 @@ body.preload {
 .foldable-box>.foldable-content {
     --mrg-mlt: 1;
     font-size: 1.25rem;
-    margin: calc(15px * var(--mrg-mlt)) 30px calc(20px * var(--mrg-mlt));
+    line-height: 1.15;
+    margin-top: calc(15px * var(--mrg-mlt));
+    margin-bottom: calc(20px * var(--mrg-mlt));
+    margin-left: max(15px, calc(var(--rel-w) * 1.75));
+    margin-right: max(15px, calc(var(--rel-w) * 1.75));
     overflow: hidden;
     max-height: 1000px;
 }
