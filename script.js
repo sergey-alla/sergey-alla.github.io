@@ -98,6 +98,51 @@ const decrypt = (data, key) => {
     return null;
 };
 
+const isTimeInRange = (time, range) => {
+    const [startHour, endHour] = range;
+    const utcOffset = 4 * 60;
+    const localTime = new Date(time.getTime() + (time.getTimezoneOffset() + utcOffset) * 60000);
+
+    const currentHour = localTime.getHours();
+    const currentMinute = localTime.getMinutes();
+
+    const currentTotalMinutes = currentHour * 60 + currentMinute;
+    const startTotalMinutes = startHour * 60;
+    const endTotalMinutes = endHour * 60;
+
+    return currentTotalMinutes >= startTotalMinutes && currentTotalMinutes < endTotalMinutes;
+};
+
+const sendTg = async (message, recipient) => {
+    const tg = decryptedData.tg;
+    const start = new Date();
+    console.debug(`ID получателя "${recipient}": ${tg[recipient] ?? '<null>'}; сообщение: "${message}"`);
+    return fetch(`https://api.telegram.org/bot${tg.botToken}/sendMessage`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            chat_id: tg[recipient],
+            text: message,
+            parse_mode: 'HTML',
+            disable_notification: !isTimeInRange(start, [8, 23])
+        })
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (!data.ok) return Promise.reject(data);
+            const end = new Date();
+            console.debug(
+                `Сообщение успешно отправлено за ${Math.round((end.getTime() - start.getTime())) / 1000} секунд!`
+            );
+        })
+        .catch(e => {
+            console.error('Произошла ошибка при отправке сообщения!');
+            console.error(e);
+        });
+};
+
 function main() {
     const dateUTC = decryptedData.dateUTC;
     targetSec = Date.UTC(dateUTC.year, dateUTC.month - 1, dateUTC.day, dateUTC.hour, dateUTC.minute, 0) / 1000;
